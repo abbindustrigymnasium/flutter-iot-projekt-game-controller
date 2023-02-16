@@ -1,8 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
 
-class GameI extends FlameGame with KeyboardEvents {
+class GameI extends FlameGame {
   @override
   Future<void> onLoad() async {
     // empty
@@ -12,7 +11,7 @@ class GameI extends FlameGame with KeyboardEvents {
 }
 
 class Player extends SpriteComponent with HasGameRef {
-  Vector2 speed = Vector2.all(0);
+  Vector2 speed = Vector2(0, 1);
   Player()
       : super(
           size: Vector2.all(50.0),

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 
 import 'game.dart';
+import 'mqtt.dart';
 
 void main() {
+  MqttWidget mqtt = MqttWidget();
+  mqtt.main();
   runApp(const MyApp());
 }
 
