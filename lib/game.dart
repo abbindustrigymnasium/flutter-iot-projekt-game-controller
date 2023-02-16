@@ -1,11 +1,13 @@
 import 'dart:math';
+import 'dart:ui';
+
 
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 
 
-class GameI extends FlameGame with KeyboardEvents {
+class GameI extends FlameGame with KeyboardEvents, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
     // empty
@@ -16,18 +18,18 @@ class GameI extends FlameGame with KeyboardEvents {
   @override
   void update(dt){
     super.update(dt);
+      var pixelRatio = window.devicePixelRatio;
+      var logicalScreenSize = window.physicalSize / pixelRatio;
       if(Random().nextInt(80) < 1 ) {
-        add(Astriod(Vector2.all(50.0), Vector2(Random().nextDouble()*900,0)));
+        add(Astriod(Vector2.all(50.0), Vector2(Random().nextDouble()*logicalScreenSize.width,0)));
     }
   }
 }
 
-class Player extends SpriteComponent with HasGameRef {
+class Player extends SpriteComponent with HasGameRef{
   Vector2 speed = Vector2(0,0);
   Player()
-      : super(
-          size: Vector2.all(50.0),
-        );
+      : super(size: Vector2.all(80.0),);
   @override
   void update(dt) {
     position += speed * dt;
@@ -36,7 +38,7 @@ class Player extends SpriteComponent with HasGameRef {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    sprite = await gameRef.loadSprite('download.png');
+    sprite = await gameRef.loadSprite('flygfull.png');
     position = gameRef.size / 2;
   }
 
@@ -66,4 +68,5 @@ class Astriod extends SpriteComponent with HasGameRef {
   void setSpeed(Vector2 a) {
     speed = a;
   }
+
 }
