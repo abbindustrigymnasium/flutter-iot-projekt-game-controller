@@ -26,7 +26,7 @@ class Player extends SpriteComponent
   JoystickComponent joystick;
 
   // Player health.
-  int _health = 30;
+  int _health = 100;
   int get health => _health;
 
   // Details of current spaceship.
@@ -103,7 +103,7 @@ class Player extends SpriteComponent
       //   ),
       // );
 
-      _health -= 10;
+      _health -= 25;
       if (_health <= 0) {
         _health = 0;
       }
@@ -246,8 +246,8 @@ class Player extends SpriteComponent
   void increaseHealthBy(int points) {
     _health += points;
     // Clamps health to 100.
-    if (_health > 30) {
-      _health = 30;
+    if (_health > 100) {
+      _health = 100;
     }
   }
 
