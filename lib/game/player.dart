@@ -18,6 +18,7 @@ import 'enemy.dart';
 import 'bullet.dart';
 import 'command.dart';
 import 'audio_player_component.dart';
+import 'bluetooth.dart';
 
 // This component class represents the player character in game.
 class Player extends SpriteComponent
@@ -25,12 +26,16 @@ class Player extends SpriteComponent
   // Player joystick
   JoystickComponent joystick;
 
+  late Bluetooth blue;
+
   // Player health.
   int _health = 100;
   int get health => _health;
 
   // Details of current spaceship.
   Spaceship _spaceship;
+
+  Vector2 controller = Vector2.zero();
 
   // Type of current spaceship.
   SpaceshipType spaceshipType;
@@ -70,6 +75,10 @@ class Player extends SpriteComponent
       _shootMultipleBullets = false;
     });
   }
+  void callback(int x, int y) {
+    controller = (Vector2(x.toDouble(), y.toDouble()) * 0.001);
+    print(controller);
+  }
 
   @override
   void onMount() {
@@ -77,6 +86,9 @@ class Player extends SpriteComponent
 
     // Adding a circular hitbox with radius as 0.8 times
     // the smallest dimension of this components size.
+    // init bluetooth and try to connect
+    blue = Bluetooth(callback, joystickAction);
+    blue.connect();
     final shape = CircleHitbox.relative(
       0.8,
       parentSize: size,
@@ -92,17 +104,8 @@ class Player extends SpriteComponent
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
 
-    // If other entity is an Enemy, reduce player's health by 10.
+    // If other entity is an Enemy, reduce player's health by 25.
     if (other is Enemy) {
-      // Make the camera shake, with custom intensity.
-      // TODO: Investigate how camera shake should be implemented in new camera system.
-      // game.primaryCamera.viewfinder.add(
-      //   MoveByEffect(
-      //     Vector2.all(10),
-      //     PerlinNoiseEffectController(duration: 1),
-      //   ),
-      // );
-
       _health -= 25;
       if (_health <= 0) {
         _health = 0;
@@ -162,8 +165,13 @@ class Player extends SpriteComponent
     // Delta time is the time elapsed since last update. For devices with higher frame rates, delta time
     // will be smaller and for devices with lower frame rates, it will be larger. Multiplying speed with
     // delta time ensure that player speed remains same irrespective of the device FPS.
+    if (!controller.isZero()) {
+      position.add(controller * _spaceship.speed * dt);
+      controller = Vector2.zero();
+    }
     if (!joystick.delta.isZero()) {
       position.add(joystick.relativeDelta * _spaceship.speed * dt);
+      print(joystick.delta);
     }
 
     if (!keyboardDelta.isZero()) {
@@ -197,6 +205,7 @@ class Player extends SpriteComponent
   }
 
   void joystickAction() {
+    //blue.dissconnect();
     Bullet bullet = Bullet(
       sprite: game.spriteSheet.getSpriteById(28),
       size: Vector2(64, 64),
