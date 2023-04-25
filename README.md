@@ -4,9 +4,10 @@
 
 A 2D game with the ability to connect bluetooth devices (bluetooth only works on android).
 
-A minor modifide copy of Spacescape, repo: https://github.com/ufrshubham/spacescape
-In that repo there exist a good install and setup manual. To connect a bluetooth device, the device needs to send data according to the format.
-For now the bluetooth address is hard coded so if you want to connect you need to change it in the code (/lib/game/bluetooth.dart) to the right address.
+A minor modified copy of Spacescape, repo: https://github.com/ufrshubham/spacescape
+
+In that repo there exist a install and setup guide. To connect a bluetooth device, the device needs to send data according to the format.
+The bluetooth address is temporarily hard coded so if you want to connect you need to change it in the code (/lib/game/bluetooth.dart:) to the right address.
 
 ## How does the bluetooth work
 
